@@ -12,17 +12,24 @@ var lifeCalc = {
     $( "#datepicker" ).datepicker({
       changeMonth: true,
       changeYear: true,
-      yearRange: "-100:+0"
-    });
-
-    $("#submit_age").on("click", function(event){
-      window.birthday = $( "#datepicker" ).datepicker( "getDate");
-      console.log("Birthday set to "+ window.birthday);
-      lifeCalc.updatePage();
+      yearRange: "-100:+0", 
+      onClose: function(selectedDate){
+        lifeCalc.setBirthday(selectedDate);
+        lifeCalc.updatePage();
+      }
     });
 
     this.initializeOptions();
   }, 
+
+  setBirthday: function(date){
+    if (date === '' || date === undefined || date === null){
+      alert("Please enter a valid birthday.");
+    } else {
+      window.birthday = $( "#datepicker" ).datepicker( "getDate");
+      alert("Birthday set to "+ window.birthday);
+    }
+  },
 
   initializeOptions: function() {
     var options = document.getElementById('options');
@@ -35,18 +42,23 @@ var lifeCalc = {
   }, 
 
   getAge: function() { // returns date as an int, TODO modify it to return as a decimal!
-    var today = new Date();
-    todayYear = today.getFullYear();
-    todayMonth = today.getMonth();
-    todayDay = today.getDate();
+    if (window.birthday === undefined || window.birthday === null){
+      alert("Please use the datepicker to enter your birthday.");
+      return null;
+    } else {
+      var today = new Date();
+      todayYear = today.getFullYear();
+      todayMonth = today.getMonth();
+      todayDay = today.getDate();
 
-    birthYear = window.birthday.getFullYear();
-    birthMonth = window.birthday.getMonth();
-    birthDay = window.birthday.getDate();
+      birthYear = window.birthday.getFullYear();
+      birthMonth = window.birthday.getMonth();
+      birthDay = window.birthday.getDate();
 
-    age = (todayYear - birthYear)+((todayMonth-birthMonth)/12.0)+((todayDay-birthDay)/30.42/12.0);
-    console.log("today = " + today + ', birthday = '+   window.birthday+ ", therefore age = "+ age);
-    return age;
+      age = (todayYear - birthYear)+((todayMonth-birthMonth)/12.0)+((todayDay-birthDay)/30.42/12.0);
+      console.log("today = " + today + ', birthday = '+   window.birthday+ ", therefore age = "+ age);
+      return age;
+    }
   }, 
 
   updatePage: function() {
@@ -129,22 +141,22 @@ var lifeCalc = {
    context.font = '60pt Calibri';
    context.lineWidth = 3;
    context.strokeText('Too small to draw', 50, 50);
-  }, 
-  
-  initializeCanvas: function(){
-    var my_canvas = document.getElementById('canvas');
-    var context = my_canvas.getContext('2d');
-    my_canvas.setAttribute('width', '850');
-    my_canvas.setAttribute('height', '1100');
-    context.fillStyle="red";
-  }, 
+ }, 
 
-  getContext: function(){
-    var my_canvas = document.getElementById('canvas');
-    var context = my_canvas.getContext('2d');
-    return context;
+ initializeCanvas: function(){
+  var my_canvas = document.getElementById('canvas');
+  var context = my_canvas.getContext('2d');
+  my_canvas.setAttribute('width', '850');
+  my_canvas.setAttribute('height', '1100');
+  context.fillStyle="red";
+}, 
 
-  }
+getContext: function(){
+  var my_canvas = document.getElementById('canvas');
+  var context = my_canvas.getContext('2d');
+  return context;
+
+}
 };
 
 $(function() {
