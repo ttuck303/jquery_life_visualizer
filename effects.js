@@ -48,7 +48,7 @@ var lifeCalc = {
     } else {
       var today = new Date();
       todayYear = today.getFullYear();
-      todayMonth = today.getMonth();
+      todayMonth = today.getMonth(); // beware, this is on a 0-11 scale, but since you are getting difference it doesn't matter here
       todayDay = today.getDate();
 
       birthYear = window.birthday.getFullYear();
@@ -86,11 +86,13 @@ var lifeCalc = {
       lifeCalc.drawDays(context, age);
       break;
       default:
-      console.log("do nothing");
+      $('#years').addClass('active');
+      lifeCalc.drawYears(context, age);
     }
   }, 
 
   drawYears: function(context, age){
+    age = Math.round(age);
     var count = 0;
     for (var y = 0; y < 9; y++){
       for (var i = 0; i < 10; i++ ) {
